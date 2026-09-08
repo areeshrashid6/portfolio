@@ -168,16 +168,35 @@ st.markdown(
     .skill-group-title { color: var(--amber); font-family: 'Fraunces', serif; font-size: 1.05rem; margin-bottom: 0.4rem; }
     .skill-list { color: var(--ink-muted); font-size: 0.96rem; line-height: 1.6; }
 
-    .project-row {
-        border-left: 2px solid var(--line);
-        padding: 0.4rem 0 0.4rem 1.1rem;
-        margin-bottom: 1.3rem;
-        transition: border-color 0.15s ease;
+    .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 1rem;
+        margin-top: 0.5rem;
     }
-    .project-row:hover { border-left-color: var(--blue); }
-    .project-name { font-family: 'Fraunces', serif; font-size: 1.2rem; color: var(--ink); }
-    .project-note { color: var(--ink-muted); font-size: 0.94rem; margin: 0.25rem 0 0.4rem 0; max-width: 40rem; }
-    .project-link { font-size: 0.92rem; }
+    .project-card {
+        background: var(--bg-alt);
+        border: 1px solid var(--line);
+        border-top: 2px solid var(--blue);
+        padding: 1.3rem 1.3rem 1.1rem 1.3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 168px;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .project-card:hover { transform: translateY(-3px); border-top-color: var(--amber); }
+    .project-name { font-family: 'Fraunces', serif; font-size: 1.15rem; color: var(--ink); margin-bottom: 0.5rem; }
+    .project-note { color: var(--ink-muted); font-size: 0.9rem; line-height: 1.5; margin: 0 0 1rem 0; flex-grow: 1; }
+    .project-link {
+        font-size: 0.85rem;
+        color: var(--blue);
+        border: 1px solid var(--line);
+        padding: 0.4rem 0.8rem;
+        display: inline-block;
+        width: fit-content;
+    }
+    .project-link:hover { color: var(--amber); border-color: var(--amber); }
 
     .case-row {
         border-left: 2px solid var(--line);
@@ -265,17 +284,20 @@ for i, (group, items) in enumerate(SKILLS):
 # ---------------------------------------------------------------------------
 
 st.markdown('<p class="section-title">Deployed apps</p>', unsafe_allow_html=True)
-for p in LIVE_PROJECTS:
-    st.markdown(
-        f'''
-        <div class="project-row">
+
+cards_html = "".join(
+    f'''
+    <div class="project-card">
+        <div>
             <div class="project-name">{p['name']}</div>
             <p class="project-note">{p['note']}</p>
-            <a class="project-link" href="{p['url']}" target="_blank">Open live app</a>
         </div>
-        ''',
-        unsafe_allow_html=True,
-    )
+        <a class="project-link" href="{p['url']}" target="_blank">Open live app</a>
+    </div>
+    '''
+    for p in LIVE_PROJECTS
+)
+st.markdown(f'<div class="project-grid">{cards_html}</div>', unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # Case studies
