@@ -168,12 +168,6 @@ st.markdown(
     .skill-group-title { color: var(--amber); font-family: 'Fraunces', serif; font-size: 1.05rem; margin-bottom: 0.4rem; }
     .skill-list { color: var(--ink-muted); font-size: 0.96rem; line-height: 1.6; }
 
-    .project-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-        gap: 1rem;
-        margin-top: 0.5rem;
-    }
     .project-card {
         background: var(--bg-alt);
         border: 1px solid var(--line);
@@ -182,7 +176,8 @@ st.markdown(
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 168px;
+        min-height: 180px;
+        margin-bottom: 1rem;
         transition: transform 0.15s ease, border-color 0.15s ease;
     }
     .project-card:hover { transform: translateY(-3px); border-top-color: var(--amber); }
@@ -285,19 +280,23 @@ for i, (group, items) in enumerate(SKILLS):
 
 st.markdown('<p class="section-title">Deployed apps</p>', unsafe_allow_html=True)
 
-cards_html = "".join(
-    f'''
-    <div class="project-card">
-        <div>
-            <div class="project-name">{p['name']}</div>
-            <p class="project-note">{p['note']}</p>
-        </div>
-        <a class="project-link" href="{p['url']}" target="_blank">Open live app</a>
-    </div>
-    '''
-    for p in LIVE_PROJECTS
-)
-st.markdown(f'<div class="project-grid">{cards_html}</div>', unsafe_allow_html=True)
+project_rows = [LIVE_PROJECTS[i:i + 3] for i in range(0, len(LIVE_PROJECTS), 3)]
+for row in project_rows:
+    cols = st.columns(len(row))
+    for col, p in zip(cols, row):
+        with col:
+            st.markdown(
+                f'''
+                <div class="project-card">
+                    <div>
+                        <div class="project-name">{p['name']}</div>
+                        <p class="project-note">{p['note']}</p>
+                    </div>
+                    <a class="project-link" href="{p['url']}" target="_blank">Open live app</a>
+                </div>
+                ''',
+                unsafe_allow_html=True,
+            )
 
 # ---------------------------------------------------------------------------
 # Case studies
